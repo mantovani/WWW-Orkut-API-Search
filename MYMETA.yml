@@ -1,0 +1,31 @@
+---
+abstract: ~
+author:
+  - 'Daniel de Oliveira Mantovani <daniel.oliveira.mantovani@gmail.com>'
+build_requires:
+  Carp: 0
+  HTML::TreeBuilder::XPath: 0
+  Moose: 0
+  Moose::Role: 0
+  Test::More: 0
+  URI::Escape: 0
+  URI::Query: 0
+  WWW::Mechanize: 0
+  XML::Simple: 0
+  namespace::clean: 0
+configure_requires:
+  Module::Build: 0.36
+dynamic_config: 0
+generated_by: 'Module::Build version 0.3607'
+license: perl
+meta-spec:
+  url: http://module-build.sourceforge.net/META-spec-v1.4.html
+  version: 1.4
+name: WWW-Orkut-API-Search
+provides:
+  WWW::Orkut::API::Search:
+    file: lib/WWW/Orkut/API/Search.pm
+    version: 0.1
+resources:
+  license: http://dev.perl.org/licenses/
+version: 0.1
