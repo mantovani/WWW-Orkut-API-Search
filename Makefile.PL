@@ -15,6 +15,7 @@ WriteMakefile(
     PREREQ_PM => {
         'Test::More'               => 0,
         'Moose'                    => 0,
+        'Moose::Role'              => 0,
         'Carp'                     => 0,
         'WWW::Mechanize'           => 0,
         'HTML::TreeBuilder::XPath' => 0,
