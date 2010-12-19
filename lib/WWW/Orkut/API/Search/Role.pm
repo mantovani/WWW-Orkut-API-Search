@@ -154,7 +154,7 @@ sub _tpc_thread_proxima_pagina_url {
     return;
 }
 
-=head _busca_tpc_parser_itens
+=head2 _busca_tpc_parser_itens
 
 Pega todos os itens da busca.
 
