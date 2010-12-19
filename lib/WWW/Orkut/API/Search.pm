@@ -40,59 +40,6 @@ has 'mechanize' => (
     },
 );
 
-=head1 SYNOPSIS
-
-    use WWW::Orkut::API::Search;
-    use Data::Dumper;
-    my $spider = WWW::Orkut::API::Search->new(
-        email    => "...",
-        password => "..."
-    );
-    my $comunidade_id = '117916';
-    my $element = $spider->get_tpc($comunidade_id);
-    my $infs    = $spider->tpc_parser($element);
-
-    # - Primeira página do fórum da comunidade que tem os tópicos,
-    #imprime todos.
-    print_stuffs($infs);
-    while ( $element = $spider->ir_next_pagina_tpc($element) ) {
-        my $infs = $spider->tpc_parser($element);
-
-        # - Segunda em diante  página do fórum da comunidade que tem
-        #os tópicos, imprime todos.
-        print_stuffs($infs);
-    }
-    sub print_stuffs {
-        foreach my $tpc_id ( keys %{$infs} ) {
-            print "Topico_ID => $tpc_id\t", $infs->{$tpc_id}{'tpc_autor'}, "\n";
-
-            # - Começa a fazer o parser da thread do tópico.
-            my $thread_element =
-              $spider->get_tpc_thread( $comunidade_id, $tpc_id );
-            my $thread_infs = $spider->tpc_thread_parser($thread_element);
-        
-            # - Imprime o conteúdo dentro do tópico a thread,
-            #aqui imprime a primeira página.
-            print Dumper $thread_infs;
-        
-            foreach my $thread_inf ( @{$thread_infs} ) {
-                while ( my $thread_element =
-                    $spider->ir_next_pagina_tpc_thread($thread_element) )
-                {
-                    my $thread_infs =
-                      $spider->tpc_thread_parser($thread_element);
-                
-                    # - Imprime o conteúdo dentro do tópico a thread
-                    #aqui imprime a segunda página em diante.
-                    print Dumper $thread_infs;
-                }
-            }
-        }
-    }
-
-
-=cut
-
 =head2 logar
 
 Se loga no Orkut, retornando a página inicial.
@@ -417,28 +364,63 @@ __END__
 
 =head1 NAME
 
-WWW::Orkut::API::Search - The great new WWW::Orkut::API::Search!
+WWW::Orkut::API::Search - API for Orkut
+
+=head1 SYNOPSIS
+
+    use WWW::Orkut::API::Search;
+    use Data::Dumper;
+    my $spider = WWW::Orkut::API::Search->new(
+        email    => "...",
+        password => "..."
+    );
+    my $comunidade_id = '117916';
+    my $element = $spider->get_tpc($comunidade_id);
+    my $infs    = $spider->tpc_parser($element);
+
+    # - Primeira página do fórum da comunidade que tem os tópicos,
+    #imprime todos.
+    print_stuffs($infs);
+    while ( $element = $spider->ir_next_pagina_tpc($element) ) {
+        my $infs = $spider->tpc_parser($element);
+
+        # - Segunda em diante  página do fórum da comunidade que tem
+        #os tópicos, imprime todos.
+        print_stuffs($infs);
+    }
+    sub print_stuffs {
+        foreach my $tpc_id ( keys %{$infs} ) {
+            print "Topico_ID => $tpc_id\t", $infs->{$tpc_id}{'tpc_autor'}, "\n";
+
+            # - Começa a fazer o parser da thread do tópico.
+            my $thread_element =
+              $spider->get_tpc_thread( $comunidade_id, $tpc_id );
+            my $thread_infs = $spider->tpc_thread_parser($thread_element);
+        
+            # - Imprime o conteúdo dentro do tópico a thread,
+            #aqui imprime a primeira página.
+            print Dumper $thread_infs;
+        
+            foreach my $thread_inf ( @{$thread_infs} ) {
+                while ( my $thread_element =
+                    $spider->ir_next_pagina_tpc_thread($thread_element) )
+                {
+                    my $thread_infs =
+                      $spider->tpc_thread_parser($thread_element);
+                
+                    # - Imprime o conteúdo dentro do tópico a thread
+                    #aqui imprime a segunda página em diante.
+                    print Dumper $thread_infs;
+                }
+            }
+        }
+    }
+
 
 =head1 VERSION
 
 Version 0.01
 
-
-=head1 SYNOPSIS
-
-Quick summary of what the module does.
-
-Perhaps a little code snippet.
-
-    use WWW::Orkut::API::Search;
-
-    my $foo = WWW::Orkut::API::Search->new();
-    ...
-
-=head1 EXPORT
-
-A list of functions that can be exported.  You can delete this section
-if you don't export anything, such as for a purely object-oriented module.
 
 =head1 AUTHOR
 
