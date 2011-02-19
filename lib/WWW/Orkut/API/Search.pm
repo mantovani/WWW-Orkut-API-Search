@@ -50,7 +50,7 @@ Se loga no Orkut, retornando a página inicial.
 sub logar {
     my $self = shift;
     $self->mechanize->get( $self->url_login );
-    return unless $mech->success;
+    return unless $self->mechanize->success;
 
     $self->mechanize->submit_form(
         form_number => 1,
@@ -60,14 +60,14 @@ sub logar {
             'PersistentCookie=' => 'Yes',
         }
     );
-    return unless $mech->success;
+    return unless $self->mechanize->success;
 
     $self->mechanize->follow_link( n => 1 );
 
     # Se tu passar a url completa nao funciona, tem que passar o PATH
 
     $self->mechanize->get('/Home.aspx');
-    return unless $mech->success;
+    return unless $self->mechanize->success;
 
     confess "usuario/senha invalidos" if $self->mechanize->title !~ /orkut/;
 
@@ -102,7 +102,7 @@ sub get_tpc {
 
     my $mech = $self->mechanize->clone;
     $mech->get( url_cmd . $cmd_id );
-    return unless $mech->success;
+    return unless $self->mechanize->success;
 
     my $element = XPath->new_from_content( $mech->content );
     return $element;
@@ -144,7 +144,7 @@ sub ir_next_pagina_tpc {
 
     my $mech = $self->mechanize->clone;
     $mech->get($url_next);
-    return unless $mech->success;
+    return unless $self->mechanize->success;
     $element = $element->delete;
     return $element = XPath->new_from_content( $mech->content );
 }
@@ -204,7 +204,7 @@ sub get_tpc_thread {
 
     my $mech = $self->mechanize->clone;
     $mech->get( $self->_uri_thread( $cmd_id, $tpc_id ) );
-    return unless $mech->success;
+    return unless $self->mechanize->success;
     my $thread_element = XPath->new_from_content( $mech->content );
     return $thread_element
 
@@ -286,7 +286,7 @@ sub ir_next_pagina_tpc_thread {
 
     my $mech = $self->mechanize->clone;
     $mech->get($url_next);
-    return unless $mech->success;
+    return unless $self->mechanize->success;
     $thread_element = $thread_element->delete;
     return $thread_element = XPath->new_from_content( $mech->content );
 }
@@ -313,7 +313,7 @@ sub busca_tpc {
 
     my $mech = $self->mechanize->clone;
     $mech->get( busca_tpc_url . $busca . busca_brasil );
-    return unless $mech->success;
+    return unless $self->mechanize->success;
 
     my $tpc_busca_element = XPath->new_from_content( $mech->content );
     return $tpc_busca_element;
