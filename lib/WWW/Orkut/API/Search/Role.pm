@@ -3,7 +3,7 @@ package WWW::Orkut::API::Search::Role;
 use Moose::Role;
 use URI::Escape;
 
-our $VERSION = '0.1';
+our $VERSION = '0.2';
 
 =head2 _tpc_id
 
@@ -218,9 +218,7 @@ sub _busca_tpc_parser_tpc_id {
               $self->_clean_busca_url(
                 $mensagem->findnodes('.//a')->[0]->attr('href') );
 
-    # - Na menasgem vem "..." no começo e no final da mensagem junto com "view"
-    # eu estou removendo isso, as vezes os "..." vem separado por espaços.
-            $msg =~ s/[\.\s]{1,}(.+)\.{3}\sview/$1/;
+            return unless $link_msg;
 
             push(
                 @{ $struct->{'mensagens'} },
