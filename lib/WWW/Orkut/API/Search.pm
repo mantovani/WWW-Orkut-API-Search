@@ -10,6 +10,67 @@ use URI::Query;
 use URI::Escape;
 use utf8;
 
+=head1 NAME
+
+WWW::Orkut::API::Search - API for Orkut
+
+=head1 SYNOPSIS
+
+    use WWW::Orkut::API::Search;
+    use Data::Dumper;
+    my $spider = WWW::Orkut::API::Search->new(
+        email    => "...",
+        password => "..."
+    );
+    my $comunidade_id = '117916';
+    my $element = $spider->get_tpc($comunidade_id);
+    my $infs    = $spider->tpc_parser($element);
+
+    # - Primeira página do fórum da comunidade que tem os tópicos,
+    #imprime todos.
+    print_stuffs($infs);
+    while ( $element = $spider->ir_next_pagina_tpc($element) ) {
+        my $infs = $spider->tpc_parser($element);
+
+        # - Segunda em diante  página do fórum da comunidade que tem
+        #os tópicos, imprime todos.
+        print_stuffs($infs);
+    }
+    sub print_stuffs {
+        foreach my $tpc_id ( keys %{$infs} ) {
+            print "Topico_ID => $tpc_id\t", $infs->{$tpc_id}{'tpc_autor'}, "\n";
+
+            # - Começa a fazer o parser da thread do tópico.
+            my $thread_element =
+              $spider->get_tpc_thread( $comunidade_id, $tpc_id );
+            my $thread_infs = $spider->tpc_thread_parser($thread_element);
+        
+            # - Imprime o conteúdo dentro do tópico a thread,
+            #aqui imprime a primeira página.
+            print Dumper $thread_infs;
+        
+            foreach my $thread_inf ( @{$thread_infs} ) {
+                while ( my $thread_element =
+                    $spider->ir_next_pagina_tpc_thread($thread_element) )
+                {
+                    my $thread_infs =
+                      $spider->tpc_thread_parser($thread_element);
+                
+                    # - Imprime o conteúdo dentro do tópico a thread
+                    #aqui imprime a segunda página em diante.
+                    print Dumper $thread_infs;
+                }
+            }
+        }
+    }
+
+
+=head1 VERSION
+
+Version 0.01
+
+=cut
+
 our $VERSION = '0.2';
 
 use constant url_cmd       => '/CommTopics?cmm=';
@@ -373,65 +434,6 @@ sub busca_tpc_parser {
 __PACKAGE__->meta->make_immutable;
 1;
 __END__
-
-=head1 NAME
-
-WWW::Orkut::API::Search - API for Orkut
-
-=head1 SYNOPSIS
-
-    use WWW::Orkut::API::Search;
-    use Data::Dumper;
-    my $spider = WWW::Orkut::API::Search->new(
-        email    => "...",
-        password => "..."
-    );
-    my $comunidade_id = '117916';
-    my $element = $spider->get_tpc($comunidade_id);
-    my $infs    = $spider->tpc_parser($element);
-
-    # - Primeira página do fórum da comunidade que tem os tópicos,
-    #imprime todos.
-    print_stuffs($infs);
-    while ( $element = $spider->ir_next_pagina_tpc($element) ) {
-        my $infs = $spider->tpc_parser($element);
-
-        # - Segunda em diante  página do fórum da comunidade que tem
-        #os tópicos, imprime todos.
-        print_stuffs($infs);
-    }
-    sub print_stuffs {
-        foreach my $tpc_id ( keys %{$infs} ) {
-            print "Topico_ID => $tpc_id\t", $infs->{$tpc_id}{'tpc_autor'}, "\n";
-
-            # - Começa a fazer o parser da thread do tópico.
-            my $thread_element =
-              $spider->get_tpc_thread( $comunidade_id, $tpc_id );
-            my $thread_infs = $spider->tpc_thread_parser($thread_element);
-        
-            # - Imprime o conteúdo dentro do tópico a thread,
-            #aqui imprime a primeira página.
-            print Dumper $thread_infs;
-        
-            foreach my $thread_inf ( @{$thread_infs} ) {
-                while ( my $thread_element =
-                    $spider->ir_next_pagina_tpc_thread($thread_element) )
-                {
-                    my $thread_infs =
-                      $spider->tpc_thread_parser($thread_element);
-                
-                    # - Imprime o conteúdo dentro do tópico a thread
-                    #aqui imprime a segunda página em diante.
-                    print Dumper $thread_infs;
-                }
-            }
-        }
-    }
-
-
-=head1 VERSION
-
-Version 0.01
 
 
 =head1 AUTHOR
